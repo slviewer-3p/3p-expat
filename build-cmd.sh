@@ -24,6 +24,9 @@ EXPAT_SOURCE_DIR=expat-$EXPAT_VERSION
 top="$(dirname "$0")"
 STAGING_DIR="$(pwd)"
 
+build=${AUTOBUILD_BUILD_ID:=0}
+echo "${EXPAT_VERSION}.${build}" > "${STAGING_DIR}/VERSION.txt"
+
 pushd "$top/$EXPAT_SOURCE_DIR"
     case "$AUTOBUILD_PLATFORM" in
         "windows")
@@ -46,11 +49,11 @@ pushd "$top/$EXPAT_SOURCE_DIR"
             cp lib/expat_external.h "$INCLUDE_DIR"
         ;;
         'darwin')
-            opts='-arch i386 -iwithsysroot /Developer/SDKs/MacOSX10.5.sdk -mmacosx-version-min=10.5'
+            opts='-arch i386 -iwithsysroot /Developer/SDKs/MacOSX10.8.sdk -mmacosx-version-min=10.7'
             export CFLAGS="$opts"
             export CXXFLAGS="$opts"
             export LDFLAGS="$opts"
-            export CC="gcc-4.2"
+            export CC="clang"
             export PREFIX="$STAGING_DIR"
             ./configure --prefix=$PREFIX
             make
