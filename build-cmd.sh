@@ -5,7 +5,7 @@ set -x
 # make errors fatal
 set -e
 
-if [ -z "$AUTOBUILD" ] ; then 
+if [ -z "$AUTOBUILD" ] ; then
     fail
 fi
 
@@ -42,14 +42,14 @@ pushd "$top/$EXPAT_SOURCE_DIR"
             mkdir -p "$BASE_DIR/lib/release"
             cp win32/bin/Release/libexpatMT.lib "$BASE_DIR/lib/release/"
             cp win32/bin/Debug/libexpatMT.lib "$BASE_DIR/lib/debug/"
-            
+
             INCLUDE_DIR="$STAGING_DIR/include/expat"
             mkdir -p "$INCLUDE_DIR"
             cp lib/expat.h "$INCLUDE_DIR"
             cp lib/expat_external.h "$INCLUDE_DIR"
         ;;
         'darwin')
-            opts='-arch i386 -iwithsysroot /Developer/SDKs/MacOSX10.8.sdk -mmacosx-version-min=10.7'
+            opts='-arch i386 -iwithsysroot /Developer/SDKs/MacOSX10.9.sdk -mmacosx-version-min=10.7'
             export CFLAGS="$opts"
             export CXXFLAGS="$opts"
             export LDFLAGS="$opts"
@@ -58,14 +58,14 @@ pushd "$top/$EXPAT_SOURCE_DIR"
             ./configure --prefix=$PREFIX
             make
             make install
-            
+
             mv "$PREFIX/lib" "$PREFIX/release"
             mkdir -p "$PREFIX/lib"
             mv "$PREFIX/release" "$PREFIX/lib"
             pushd "$PREFIX/lib/release"
             fix_dylib_id "libexpat.dylib"
             popd
-            
+
             mv "$PREFIX/include" "$PREFIX/expat"
             mkdir -p "$PREFIX/include"
             mv "$PREFIX/expat" "$PREFIX/include"
@@ -75,7 +75,7 @@ pushd "$top/$EXPAT_SOURCE_DIR"
             CFLAGS="-m32" CC="gcc-4.1" ./configure --prefix="$PREFIX" --libdir="$PREFIX/lib/release"
             make
             make install
-            
+
             mv "$PREFIX/include" "$PREFIX/expat"
             mkdir -p "$PREFIX/include"
             mv "$PREFIX/expat" "$PREFIX/include"
