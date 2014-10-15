@@ -19,7 +19,7 @@ eval "$("$AUTOBUILD" source_environment)"
 set -x
 
 EXPAT_VERSION=2.0.1
-EXPAT_SOURCE_DIR=expat-$EXPAT_VERSION
+EXPAT_SOURCE_DIR=expat
 
 top="$(dirname "$0")"
 STAGING_DIR="$(pwd)"
