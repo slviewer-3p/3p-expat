@@ -29,19 +29,16 @@ echo "${EXPAT_VERSION}.${build}" > "${STAGING_DIR}/VERSION.txt"
 
 pushd "$top/$EXPAT_SOURCE_DIR"
     case "$AUTOBUILD_PLATFORM" in
-        "windows")
+        windows*)
             set +x
             load_vsvars
             set -x
 
-            build_sln "expat.sln" "Debug|Win32" "expat_static" || exit 1
-            build_sln "expat.sln" "Release|Win32"  "expat_static" || exit 1
+            build_sln "expat.sln" "Release|$AUTOBUILD_WIN_VSPLATFORM" "expat_static"
 
             BASE_DIR="$STAGING_DIR/"
-            mkdir -p "$BASE_DIR/lib/debug"
             mkdir -p "$BASE_DIR/lib/release"
             cp win32/bin/Release/libexpatMT.lib "$BASE_DIR/lib/release/"
-            cp win32/bin/Debug/libexpatMT.lib "$BASE_DIR/lib/debug/"
 
             INCLUDE_DIR="$STAGING_DIR/include/expat"
             mkdir -p "$INCLUDE_DIR"

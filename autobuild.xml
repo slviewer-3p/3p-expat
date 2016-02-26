@@ -110,7 +110,6 @@
           </map>
           <key>manifest</key>
           <array>
-            <string>lib/debug/libexpatMT.lib</string>
             <string>lib/release/libexpatMT.lib</string>
           </array>
           <key>name</key>
