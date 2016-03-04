@@ -4,19 +4,25 @@
 set -x
 # make errors fatal
 set -e
+# complain about undefined vars
+set -u
 
 if [ -z "$AUTOBUILD" ] ; then
     fail
 fi
 
 if [ "$OSTYPE" = "cygwin" ] ; then
-    export AUTOBUILD="$(cygpath -u $AUTOBUILD)"
+    autobuild="$(cygpath -u $AUTOBUILD)"
+else
+    autobuild="$AUTOBUILD"
 fi
 
 # load autbuild provided shell functions and variables
 set +x
-eval "$("$AUTOBUILD" source_environment)"
+eval "$("$autobuild" source_environment)"
 set -x
+
+set_build_variables convenience Release
 
 EXPAT_VERSION=2.0.1
 EXPAT_SOURCE_DIR=expat
@@ -45,8 +51,8 @@ pushd "$top/$EXPAT_SOURCE_DIR"
             cp lib/expat.h "$INCLUDE_DIR"
             cp lib/expat_external.h "$INCLUDE_DIR"
         ;;
-        'darwin')
-            opts='-arch i386 -iwithsysroot /Developer/SDKs/MacOSX10.9.sdk -mmacosx-version-min=10.7'
+        darwin*)
+            opts="-arch $AUTOBUILD_CONFIGURE_ARCH $LL_BUILD"
             export CFLAGS="$opts"
             export CXXFLAGS="$opts"
             export LDFLAGS="$opts"
@@ -67,21 +73,15 @@ pushd "$top/$EXPAT_SOURCE_DIR"
             mkdir -p "$PREFIX/include"
             mv "$PREFIX/expat" "$PREFIX/include"
         ;;
-        'linux')
+        linux*)
             PREFIX="$STAGING_DIR"
-            CFLAGS="-m32" CC="gcc-4.1" ./configure --prefix="$PREFIX" --libdir="$PREFIX/lib/release"
+            CFLAGS="-m$AUTOBUILD_ADDRSIZE $LL_BUILD" ./configure --prefix="$PREFIX" --libdir="$PREFIX/lib/release"
             make
             make install
 
             mv "$PREFIX/include" "$PREFIX/expat"
             mkdir -p "$PREFIX/include"
             mv "$PREFIX/expat" "$PREFIX/include"
-
-			make distclean
-
-			CFLAGS="-m32 -O0 -gstabs+" ./configure --prefix="$PREFIX" --libdir="$PREFIX/lib/debug"
-			make
-			make install
         ;;
     esac
 
