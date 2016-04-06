@@ -72,7 +72,7 @@ pushd "$top/$EXPAT_SOURCE_DIR"
         ;;
         'linux')
             PREFIX="$STAGING_DIR"
-            CFLAGS="-m32" CC="gcc-4.1" ./configure --prefix="$PREFIX" --libdir="$PREFIX/lib/release"
+            CFLAGS="-m32" CC="gcc-4.7" ./configure --prefix="$PREFIX" --libdir="$PREFIX/lib/release"
             make
             make install
 
