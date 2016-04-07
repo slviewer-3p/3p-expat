@@ -24,12 +24,12 @@ set -x
 
 set_build_variables convenience Release
 
-EXPAT_SOURCE_DIR=expat
-EXPAT_VERSION="$(sed -n -E "s/^ *PACKAGE_VERSION *= *'(.*)' *\$/\1/p" \
-                     "$EXPAT_SOURCE_DIR/configure")"
-
 top="$(dirname "$0")"
 STAGING_DIR="$(pwd)"
+
+EXPAT_SOURCE_DIR=expat
+EXPAT_VERSION="$(sed -n -E "s/^ *PACKAGE_VERSION *= *'(.*)' *\$/\1/p" \
+                     "$top/$EXPAT_SOURCE_DIR/configure")"
 
 build=${AUTOBUILD_BUILD_ID:=0}
 echo "${EXPAT_VERSION}.${build}" > "${STAGING_DIR}/VERSION.txt"
