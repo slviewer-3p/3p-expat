@@ -24,8 +24,9 @@ set -x
 
 set_build_variables convenience Release
 
-EXPAT_VERSION=2.0.1
 EXPAT_SOURCE_DIR=expat
+EXPAT_VERSION="$(sed -n -E "s/^ *PACKAGE_VERSION *= *'(.*)' *\$/\1/p" \
+                     "$EXPAT_SOURCE_DIR/configure")"
 
 top="$(dirname "$0")"
 STAGING_DIR="$(pwd)"
