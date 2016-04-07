@@ -86,9 +86,6 @@
             <string>lib/release/*.a</string>
             <string>lib/release/*.so.*</string>
             <string>lib/release/*.so</string>
-            <string>lib/debug/*.a</string>
-            <string>lib/debug/*.so.*</string>
-            <string>lib/debug/*.so</string>
           </array>
           <key>name</key>
           <string>linux</string>
@@ -110,7 +107,6 @@
           </map>
           <key>manifest</key>
           <array>
-            <string>lib/debug/libexpatMT.lib</string>
             <string>lib/release/libexpatMT.lib</string>
           </array>
           <key>name</key>
