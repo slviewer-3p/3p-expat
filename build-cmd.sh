@@ -1,14 +1,14 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # turn on verbose debugging output for parabuild logs.
-set -x
+exec 4>&1; export BASH_XTRACEFD=4; set -x
 # make errors fatal
 set -e
 # complain about undefined vars
 set -u
 
 if [ -z "$AUTOBUILD" ] ; then
-    fail
+    exit 1
 fi
 
 if [ "$OSTYPE" = "cygwin" ] ; then
@@ -18,11 +18,9 @@ else
 fi
 
 # load autbuild provided shell functions and variables
-set +x
-eval "$("$autobuild" source_environment)"
-set -x
-
-set_build_variables convenience Release
+source_environment_tempfile="$stage/source_environment.sh"
+"$autobuild" source_environment > "$source_environment_tempfile"
+. "$source_environment_tempfile"
 
 top="$(dirname "$0")"
 STAGING_DIR="$(pwd)"
@@ -53,7 +51,7 @@ pushd "$top/$EXPAT_SOURCE_DIR"
             cp lib/expat_external.h "$INCLUDE_DIR"
         ;;
         darwin*)
-            opts="-arch $AUTOBUILD_CONFIGURE_ARCH $LL_BUILD"
+            opts="-arch $AUTOBUILD_CONFIGURE_ARCH $LL_BUILD_RELEASE"
             export CFLAGS="$opts"
             export CXXFLAGS="$opts"
             export LDFLAGS="$opts"
@@ -76,7 +74,7 @@ pushd "$top/$EXPAT_SOURCE_DIR"
         ;;
         linux*)
             PREFIX="$STAGING_DIR"
-            CFLAGS="-m$AUTOBUILD_ADDRSIZE $LL_BUILD" ./configure --prefix="$PREFIX" --libdir="$PREFIX/lib/release"
+            CFLAGS="-m$AUTOBUILD_ADDRSIZE $LL_BUILD_RELEASE" ./configure --prefix="$PREFIX" --libdir="$PREFIX/lib/release"
             make
             make install
 
@@ -89,6 +87,3 @@ pushd "$top/$EXPAT_SOURCE_DIR"
     mkdir -p "$STAGING_DIR/LICENSES"
     cp "COPYING" "$STAGING_DIR/LICENSES/expat.txt"
 popd
-
-pass
-
