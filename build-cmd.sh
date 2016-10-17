@@ -17,13 +17,13 @@ else
     autobuild="$AUTOBUILD"
 fi
 
-# load autbuild provided shell functions and variables
-source_environment_tempfile="$stage/source_environment.sh"
-"$autobuild" source_environment > "$source_environment_tempfile"
-. "$source_environment_tempfile"
-
 top="$(dirname "$0")"
 STAGING_DIR="$(pwd)"
+
+# load autbuild provided shell functions and variables
+source_environment_tempfile="$STAGING_DIR/source_environment.sh"
+"$autobuild" source_environment > "$source_environment_tempfile"
+. "$source_environment_tempfile"
 
 EXPAT_SOURCE_DIR=expat
 EXPAT_VERSION="$(sed -n -E "s/^ *PACKAGE_VERSION *= *'(.*)' *\$/\1/p" \
