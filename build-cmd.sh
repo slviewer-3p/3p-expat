@@ -57,7 +57,11 @@ pushd "$top/$EXPAT_SOURCE_DIR"
             export LDFLAGS="$opts"
             export CC="clang"
             export PREFIX="$STAGING_DIR"
-            ./configure --prefix=$PREFIX
+            if ! ./configure --prefix=$PREFIX
+            then
+                cat config.log >&2
+                exit 1
+            fi
             make
             make install
 
