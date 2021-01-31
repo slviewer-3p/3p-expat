@@ -70,6 +70,14 @@ pushd "$top/$EXPAT_SOURCE_DIR"
             mv "$PREFIX/release" "$PREFIX/lib"
             pushd "$PREFIX/lib/release"
             fix_dylib_id "libexpat.dylib"
+
+            CONFIG_FILE="$build_secrets_checkout/code-signing-osx/config.sh"
+            if [ -f "$CONFIG_FILE" ]; then
+                source $CONFIG_FILE
+                codesign --force --timestamp --sign "$APPLE_SIGNATURE" "libexpat.dylib"
+            else 
+                echo "No config file found; skipping codesign."
+            fi
             popd
 
             mv "$PREFIX/include" "$PREFIX/expat"
