@@ -87,7 +87,7 @@ pushd "$top/$EXPAT_SOURCE_DIR"
         linux*)
             PREFIX="$STAGING_DIR"
             CFLAGS="-m$AUTOBUILD_ADDRSIZE $LL_BUILD_RELEASE" ./configure --prefix="$PREFIX" --libdir="$PREFIX/lib/release"
-            make
+            make -j `nproc`
             make install
 
             mv "$PREFIX/include" "$PREFIX/expat"
