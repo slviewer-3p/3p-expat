@@ -86,7 +86,7 @@ pushd "$top/$EXPAT_SOURCE_DIR"
         ;;
         linux*)
             PREFIX="$STAGING_DIR"
-            CFLAGS="-m$AUTOBUILD_ADDRSIZE $LL_BUILD_RELEASE" ./configure --prefix="$PREFIX" --libdir="$PREFIX/lib/release"
+            CFLAGS="${AUTOBUILD_GCC_ARCH} $LL_BUILD_RELEASE" ./configure --prefix="$PREFIX" --libdir="$PREFIX/lib/release"
             make -j `nproc`
             make install
 
